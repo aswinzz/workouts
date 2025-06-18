@@ -1,103 +1,242 @@
-import Image from "next/image";
+"use client";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { workoutData } from "@/lib/workout-data";
+import { useEffect, useState } from "react";
+
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const workoutDays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [defaultTab, setDefaultTab] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const todayIndex = new Date().getDay();
+    setDefaultTab(daysOfWeek[todayIndex]);
+  }, []);
+
+  if (!defaultTab) {
+    return null; // or a loading spinner
+  }
+
+  return (
+    <main className="container mx-auto p-4 md:p-8">
+      <header className="text-center mb-12">
+        <h1 className="text-5xl font-extrabold tracking-tight text-primary">
+          {workoutData.title}
+        </h1>
+        <p className="mt-3 text-xl text-muted-foreground">
+          {workoutData.description}
+        </p>
+      </header>
+
+      <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div className="md:col-span-1 space-y-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>{workoutData.workoutSplit.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-muted-foreground">
+                {workoutData.workoutSplit.days.map((day) => (
+                  <li key={day} className="flex items-center">
+                    <span className="text-primary mr-2">✓</span>
+                    {day}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Important Notes</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {workoutData.importantNotes.map((note) => (
+                <div key={note.title}>
+                  <h3 className="font-semibold text-card-foreground">
+                    {note.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    {note.content}
+                  </p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <div className="md:col-span-2">
+          <Card className="min-h-full">
+            <CardHeader>
+              <CardTitle className="text-2xl">
+                Detailed Workout Plan
+              </CardTitle>
+              <CardDescription>
+                Select a day to see the detailed workout plan. The current day
+                is selected by default.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue={defaultTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-3 md:grid-cols-7 mb-4">
+                  {workoutDays.map((day) => (
+                    <TabsTrigger key={day} value={day}>
+                      {day.substring(0, 3)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {workoutData.detailedWorkout.map((day, index) => (
+                  <TabsContent
+                    value={workoutDays[index]}
+                    key={day.day}
+                    className="mt-6"
+                  >
+                    {day.description ? (
+                      <p className="text-muted-foreground">{day.description}</p>
+                    ) : (
+                      <div className="space-y-6">
+                        {day.compoundExercise && (
+                          <div>
+                            <h3 className="text-lg font-semibold mb-2 text-primary">
+                              Compound Exercise
+                            </h3>
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Exercise</TableHead>
+                                  <TableHead>Sets</TableHead>
+                                  <TableHead>Reps</TableHead>
+                                  <TableHead>Notes</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">
+                                    {day.compoundExercise.name}
+                                  </TableCell>
+                                  <TableCell>
+                                    {day.compoundExercise.sets}
+                                  </TableCell>
+                                  <TableCell>
+                                    {day.compoundExercise.reps}
+                                  </TableCell>
+                                  <TableCell>
+                                    {day.compoundExercise.notes}
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+
+                        {day.accessoryExercises &&
+                          day.accessoryExercises.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-2 text-primary">
+                                Accessory Exercises
+                              </h3>
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Exercise</TableHead>
+                                    <TableHead>Sets</TableHead>
+                                    <TableHead>Reps</TableHead>
+                                    <TableHead>Notes</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {day.accessoryExercises.map((ex) => (
+                                    <TableRow key={ex.name}>
+                                      <TableCell className="font-medium">
+                                        {ex.name}
+                                      </TableCell>
+                                      <TableCell>{ex.sets}</TableCell>
+                                      <TableCell>{ex.reps}</TableCell>
+                                      <TableCell>{ex.notes}</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
+                          )}
+
+                        {day.abs && day.abs.exercises.length > 0 && (
+                          <div>
+                            <h3 className="text-lg font-semibold mb-2 text-primary">
+                              {day.abs.title}
+                            </h3>
+                            {day.abs.notes && (
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {day.abs.notes}
+                              </p>
+                            )}
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Exercise</TableHead>
+                                  <TableHead>Sets</TableHead>
+                                  <TableHead>Reps</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {day.abs.exercises.map((ex) => (
+                                  <TableRow key={ex.name}>
+                                    <TableCell className="font-medium">
+                                      {ex.name}
+                                    </TableCell>
+                                    <TableCell>{ex.sets}</TableCell>
+                                    <TableCell>{ex.reps}</TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <footer className="text-center mt-12 mb-4">
+        <p className="text-muted-foreground">{workoutData.finalNote}</p>
       </footer>
-    </div>
+    </main>
   );
 }
