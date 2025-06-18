@@ -54,16 +54,16 @@ export default function Home() {
   return (
     <main className="container mx-auto p-4 md:p-8">
       <header className="text-center mb-12">
-        <h1 className="text-5xl font-extrabold tracking-tight text-primary">
+        <h1 className="text-center text-4xl md:text-5xl font-extrabold tracking-tight text-primary">
           {workoutData.title}
         </h1>
-        <p className="mt-3 text-xl text-muted-foreground">
+        <p className="mt-3 text-center text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
           {workoutData.description}
         </p>
       </header>
 
       <div className="grid md:grid-cols-3 gap-8 mb-12">
-        <div className="md:col-span-1 space-y-8">
+        <div className="md:col-span-1 space-y-8 min-w-0">
           <Card>
             <CardHeader>
               <CardTitle>{workoutData.workoutSplit.title}</CardTitle>
@@ -97,7 +97,7 @@ export default function Home() {
             </CardContent>
           </Card>
         </div>
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 min-w-0">
           <Card className="min-h-full">
             <CardHeader>
               <CardTitle className="text-2xl">
@@ -110,13 +110,15 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue={defaultTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-3 md:grid-cols-7 mb-4">
-                  {workoutDays.map((day) => (
-                    <TabsTrigger key={day} value={day}>
-                      {day.substring(0, 3)}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+                <div className="overflow-x-auto pb-2">
+                  <TabsList className="w-full justify-start">
+                    {workoutDays.map((day) => (
+                      <TabsTrigger key={day} value={day}>
+                        {day}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
                 {workoutData.detailedWorkout.map((day, index) => (
                   <TabsContent
                     value={workoutDays[index]}
@@ -132,41 +134,7 @@ export default function Home() {
                             <h3 className="text-lg font-semibold mb-2 text-primary">
                               Compound Exercise
                             </h3>
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Exercise</TableHead>
-                                  <TableHead>Sets</TableHead>
-                                  <TableHead>Reps</TableHead>
-                                  <TableHead>Notes</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                <TableRow>
-                                  <TableCell className="font-medium">
-                                    {day.compoundExercise.name}
-                                  </TableCell>
-                                  <TableCell>
-                                    {day.compoundExercise.sets}
-                                  </TableCell>
-                                  <TableCell>
-                                    {day.compoundExercise.reps}
-                                  </TableCell>
-                                  <TableCell>
-                                    {day.compoundExercise.notes}
-                                  </TableCell>
-                                </TableRow>
-                              </TableBody>
-                            </Table>
-                          </div>
-                        )}
-
-                        {day.accessoryExercises &&
-                          day.accessoryExercises.length > 0 && (
-                            <div>
-                              <h3 className="text-lg font-semibold mb-2 text-primary">
-                                Accessory Exercises
-                              </h3>
+                            <div className="overflow-x-auto rounded-lg border">
                               <Table>
                                 <TableHeader>
                                   <TableRow>
@@ -177,18 +145,56 @@ export default function Home() {
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                  {day.accessoryExercises.map((ex) => (
-                                    <TableRow key={ex.name}>
-                                      <TableCell className="font-medium">
-                                        {ex.name}
-                                      </TableCell>
-                                      <TableCell>{ex.sets}</TableCell>
-                                      <TableCell>{ex.reps}</TableCell>
-                                      <TableCell>{ex.notes}</TableCell>
-                                    </TableRow>
-                                  ))}
+                                  <TableRow>
+                                    <TableCell className="font-medium">
+                                      {day.compoundExercise.name}
+                                    </TableCell>
+                                    <TableCell>
+                                      {day.compoundExercise.sets}
+                                    </TableCell>
+                                    <TableCell>
+                                      {day.compoundExercise.reps}
+                                    </TableCell>
+                                    <TableCell>
+                                      {day.compoundExercise.notes}
+                                    </TableCell>
+                                  </TableRow>
                                 </TableBody>
                               </Table>
+                            </div>
+                          </div>
+                        )}
+
+                        {day.accessoryExercises &&
+                          day.accessoryExercises.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-2 text-primary">
+                                Accessory Exercises
+                              </h3>
+                              <div className="overflow-x-auto rounded-lg border">
+                                <Table>
+                                  <TableHeader>
+                                    <TableRow>
+                                      <TableHead>Exercise</TableHead>
+                                      <TableHead>Sets</TableHead>
+                                      <TableHead>Reps</TableHead>
+                                      <TableHead>Notes</TableHead>
+                                    </TableRow>
+                                  </TableHeader>
+                                  <TableBody>
+                                    {day.accessoryExercises.map((ex) => (
+                                      <TableRow key={ex.name}>
+                                        <TableCell className="font-medium">
+                                          {ex.name}
+                                        </TableCell>
+                                        <TableCell>{ex.sets}</TableCell>
+                                        <TableCell>{ex.reps}</TableCell>
+                                        <TableCell>{ex.notes}</TableCell>
+                                      </TableRow>
+                                    ))}
+                                  </TableBody>
+                                </Table>
+                              </div>
                             </div>
                           )}
 
@@ -202,26 +208,28 @@ export default function Home() {
                                 {day.abs.notes}
                               </p>
                             )}
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Exercise</TableHead>
-                                  <TableHead>Sets</TableHead>
-                                  <TableHead>Reps</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {day.abs.exercises.map((ex) => (
-                                  <TableRow key={ex.name}>
-                                    <TableCell className="font-medium">
-                                      {ex.name}
-                                    </TableCell>
-                                    <TableCell>{ex.sets}</TableCell>
-                                    <TableCell>{ex.reps}</TableCell>
+                            <div className="overflow-x-auto rounded-lg border">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Exercise</TableHead>
+                                    <TableHead>Sets</TableHead>
+                                    <TableHead>Reps</TableHead>
                                   </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
+                                </TableHeader>
+                                <TableBody>
+                                  {day.abs.exercises.map((ex) => (
+                                    <TableRow key={ex.name}>
+                                      <TableCell className="font-medium">
+                                        {ex.name}
+                                      </TableCell>
+                                      <TableCell>{ex.sets}</TableCell>
+                                      <TableCell>{ex.reps}</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
                           </div>
                         )}
                       </div>
